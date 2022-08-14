@@ -37,11 +37,10 @@ function App() {
 
   useEffect(() => {
     async function fetchData() {
-      let response = await getAllPokemon(initialURL);
-      console.log(response, "hello");
-      setNextUrl(response.next);
-      setPrevUrl(response.previous);
-      await loadPokemon(response.results);
+      let result = await getAllPokemon(initialURL)
+      setNextUrl(result.data.next);
+      setPrevUrl(result.data.previous);
+      await loadPokemon(result.data.results);
       // setLoading(false);
     }
     fetchData();
@@ -49,32 +48,30 @@ function App() {
 
   const next = async () => {
     // setLoading(true);
-    let data = await getAllPokemon(nextUrl);
-    await loadPokemon(data.results);
-    setNextUrl(data.next);
-    setPrevUrl(data.previous);
+    let result = await getAllPokemon(nextUrl)
+    await loadPokemon(result.data.results);
+    setNextUrl(result.data.next);
+    setPrevUrl(result.data.previous);
     // setLoading(false);
   };
 
   const prev = async () => {
     if (!prevUrl) return;
     // setLoading(true);
-    let data = await getAllPokemon(prevUrl);
-    await loadPokemon(data.results);
-    setNextUrl(data.next);
-    setPrevUrl(data.previous);
+    let result = await getAllPokemon(prevUrl)
+    await loadPokemon(result.data.results);
+    setNextUrl(result.data.next);
+    setPrevUrl(result.data.previous);
     // setLoading(false);
   };
 
   const loadPokemon = async (data) => {
-    let _pokemonData = await Promise.all(
-      data.map(async (pokemon) => {
-        let pokemonRecord = await getPokemon(pokemon);
-        return pokemonRecord;
-      })
-    );
-    console.log(_pokemonData, "bye");
-    setPokemonData(_pokemonData);
+    let pokemonData = []
+     for(data of data){
+        let result = await getPokemon(data.url)
+        pokemonData.push(result.data);
+      }
+      setPokemonData(pokemonData)     
   };
 
   return (

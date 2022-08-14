@@ -1,17 +1,15 @@
-export function getPokemon({ url }) {
-    return new Promise((resolve, reject) => {
-        fetch(url).then(res => res.json())
-            .then(data => {
-                resolve(data)
-            })
-    });
-}
+import axios from "axios";
 
-export async function getAllPokemon(url) {
-    return new Promise((resolve, reject) => {
-        fetch(url).then(res => res.json())
-            .then(data => {
-                resolve(data)
-            })
+export const getPokemon = async (url) => {
+    return await axios({
+      method: "GET",
+      url: url,
     });
-}
+  };
+
+export const getAllPokemon = async (url) => {
+    return await axios({
+      method: "GET",
+      url: url,
+    });
+  };
